@@ -13,8 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class UsersController {
 
-    @Autowired
     private UsersService usersService;
+
+    @Autowired
+    public void setUsersService(UsersService usersService){
+        this.usersService = usersService;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestBody ObjectNode objectNode){
@@ -27,7 +31,7 @@ public class UsersController {
         if(!success){
             return ResponseEntity.badRequest().body("User was not logged in!");
         }
-        return ResponseEntity.accepted().body("Login successful");
+        return ResponseEntity.ok().body("Login successful");
     }
 
     @PostMapping("/register")
@@ -36,6 +40,6 @@ public class UsersController {
         if(!success){
             return ResponseEntity.badRequest().body("User could not be registered!");
         }
-        return ResponseEntity.accepted().body("User registered successfully");
+        return ResponseEntity.ok().body("User registered successfully");
     }
 }

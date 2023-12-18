@@ -10,10 +10,15 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UsersService {
 
-    @Autowired
-    private UsersRepository usersRepository;
+    private final UsersRepository usersRepository;
 
-    private static Users activeUser;
+    private Users activeUser;
+
+    @Autowired
+    public UsersService(UsersRepository usersRepository){
+        this.usersRepository = usersRepository;
+        activeUser = null;
+    }
 
     public boolean loginUser(String phone){
         Users currentUser = usersRepository.findByPhone(phone);
@@ -34,4 +39,9 @@ public class UsersService {
         }
         return true;
     }
+
+    public Users getActiveUser(){
+        return activeUser;
+    }
+
 }

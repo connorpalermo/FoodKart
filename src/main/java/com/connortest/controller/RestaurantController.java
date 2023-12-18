@@ -2,6 +2,7 @@ package com.connortest.controller;
 
 import com.connortest.entity.Restaurant;
 import com.connortest.service.RestaurantService;
+import com.connortest.service.UsersService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +17,18 @@ import java.util.List;
 @Slf4j
 public class RestaurantController {
 
-    @Autowired
     private RestaurantService restaurantService;
+    private UsersService usersService;
+
+    @Autowired
+    public void setRestaurantService(RestaurantService restaurantService){
+        this.restaurantService = restaurantService;
+    }
+
+    @Autowired
+    public void setUsersService(UsersService usersService){
+        this.usersService = usersService;
+    }
 
     @PostMapping("/register")
     public ResponseEntity<String> registerRestaurant(@RequestBody Restaurant restaurant){
@@ -25,7 +36,7 @@ public class RestaurantController {
         if(!success){
             return ResponseEntity.badRequest().body("Failed to register restaurant!");
         }
-        return ResponseEntity.accepted().body("Restaurant registered successfully");
+        return ResponseEntity.ok().body("Restaurant registered successfully");
     }
 
     @PostMapping("/updateQuantity")
@@ -39,7 +50,7 @@ public class RestaurantController {
         if(!success){
             return ResponseEntity.badRequest().body("Failed to update quantity!");
         }
-        return ResponseEntity.accepted().body("Quantity updated successfully");
+        return ResponseEntity.ok().body("Quantity updated successfully");
     }
 
     @PostMapping("/placeOrder")
@@ -53,15 +64,19 @@ public class RestaurantController {
         if(!success){
             return ResponseEntity.badRequest().body("Order cannot be placed!");
         }
-        return ResponseEntity.accepted().body("Order placed successfully");
+        return ResponseEntity.ok().body("Order placed successfully");
     }
 
     @GetMapping("/findByPrice")
     public ResponseEntity<List<String>> findByPrice(@RequestParam int price){
-        List<String> restaurants = restaurantService.findByPrice(price);
-        if(restaurants.isEmpty()){
-            return ResponseEntity.badRequest().body(restaurants);
+        String activePincode;
+        try {
+             activePincode = usersService.getActiveUser().getPincode();
+        } catch(NullPointerException e){
+            log.error("User is not signed in! Please login first.");
+            return ResponseEntity.internalServerError().body(null);
         }
-        return ResponseEntity.accepted().body(restaurants);
+        List<String> restaurants = restaurantService.findByPrice(price, activePincode);
+        return ResponseEntity.ok().body(restaurants);
     }
 }

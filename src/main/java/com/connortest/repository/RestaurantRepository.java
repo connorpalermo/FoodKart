@@ -10,7 +10,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
 
     Restaurant findByName(String name);
 
-    @Query(value = "SELECT name FROM restaurant WHERE food_price <= ?1", nativeQuery = true)
-    List<String> findByFoodPrice(int price);
+    @Query(value = "SELECT * FROM restaurant WHERE food_price <= ?1", nativeQuery = true)
+    List<Restaurant> findByFoodPrice(int price);
 
 }
