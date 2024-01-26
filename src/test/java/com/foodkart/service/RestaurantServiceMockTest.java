@@ -35,7 +35,7 @@ public class RestaurantServiceMockTest {
     }
 
     @Test
-    public void testRegisterRestaurantReview(){
+    public void testRegisterRestaurant(){
         when(restaurantServiceMock.registerRestaurant(restaurant)).thenReturn(restaurant);
 
         restaurantServiceMock.registerRestaurant(restaurant);
@@ -65,9 +65,10 @@ public class RestaurantServiceMockTest {
 
         RestaurantDoesNotExistException thrown = assertThrows(
                RestaurantDoesNotExistException.class,
-                () -> restaurantServiceMock.updateQuantity(restaurant.getRestaurantNumber(), 20),
+                () -> restaurantServiceMock.updateQuantity(20, 5),
                 "Expected updateQuantity to throw, but it didn't");
 
+        verify(restaurantRepoMock).findByRestaurantNumber(20);
         assertNotNull(thrown);
         assertTrue(thrown.getMessage().contains("does not exist."));
     }
@@ -87,9 +88,10 @@ public class RestaurantServiceMockTest {
 
         RestaurantDoesNotExistException thrown = assertThrows(
                 RestaurantDoesNotExistException.class,
-                () -> restaurantServiceMock.placeOrder(restaurant.getRestaurantNumber(), 20),
+                () -> restaurantServiceMock.placeOrder(20, 5),
                 "Expected updateQuantity to throw, but it didn't");
 
+        verify(restaurantRepoMock).findByRestaurantNumber(20);
         assertNotNull(thrown);
         assertTrue(thrown.getMessage().contains("does not exist."));
     }

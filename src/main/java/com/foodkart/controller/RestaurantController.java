@@ -3,7 +3,6 @@ package com.foodkart.controller;
 import com.foodkart.entity.Restaurant;
 import com.foodkart.service.RestaurantService;
 import com.foodkart.service.UsersService;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.foodkart.exception.RestaurantDoesNotExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,13 +38,11 @@ public class RestaurantController {
         return ResponseEntity.ok().body("Restaurant registered successfully with ID: " + r1.getId());
     }
 
-    @PostMapping("/updateQuantity")
-    public ResponseEntity<String> updateQuantity(@RequestBody ObjectNode objectNode){
+    @PutMapping("/updateQuantity/{restaurantNumber}/{itemQuantity}")
+    public ResponseEntity<String> updateQuantity(@PathVariable int restaurantNumber, @PathVariable int itemQuantity){
         boolean success = false;
         try {
-            success = restaurantService.updateQuantity(objectNode.get("restaurantNumber").intValue(), objectNode.get("itemQuantity").intValue());
-        } catch (NullPointerException e){
-            log.error("Body params formatted incorrectly.");
+            success = restaurantService.updateQuantity(restaurantNumber, itemQuantity);
         } catch (RestaurantDoesNotExistException e){
             log.error(e.getMessage());
         }
@@ -55,13 +52,11 @@ public class RestaurantController {
         return ResponseEntity.ok().body("Quantity updated successfully");
     }
 
-    @PostMapping("/placeOrder")
-    public ResponseEntity<String> placeOrder(@RequestBody ObjectNode objectNode){
+    @PostMapping("/placeOrder/{restaurantNumber}/{itemQuantity}")
+    public ResponseEntity<String> placeOrder(@PathVariable int restaurantNumber, @PathVariable int itemQuantity){
         boolean success = false;
         try {
-            success = restaurantService.placeOrder(objectNode.get("restaurantNumber").intValue(), objectNode.get("itemQuantity").intValue());
-        } catch (NullPointerException e){
-            log.error("Body params formatted incorrectly.");
+            success = restaurantService.placeOrder(restaurantNumber, itemQuantity);
         } catch (RestaurantDoesNotExistException e){
             log.error(e.getMessage());
         }

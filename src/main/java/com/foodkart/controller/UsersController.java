@@ -25,11 +25,9 @@ public class UsersController {
     public ResponseEntity<String> loginUser(@PathVariable String username){
         try {
             usersService.loginUser(username);
-        } catch (NullPointerException e){
-            log.error("Body params formatted incorrectly.");
         } catch (UserDoesNotExistException e){
             log.error(e.getMessage());
-            return ResponseEntity.badRequest().body("User " + username + " does not exist!");
+            return ResponseEntity.badRequest().body("User " + username + " does not exist.");
         }
         return ResponseEntity.ok().body("Login successful for user: " + username);
     }
