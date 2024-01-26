@@ -1,10 +1,10 @@
-package com.connortest.controller;
+package com.foodkart.controller;
 
-import com.connortest.entity.Restaurant;
-import com.connortest.service.RestaurantService;
-import com.connortest.service.UsersService;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.foodkart.entity.Restaurant;
+import com.foodkart.service.RestaurantService;
+import com.foodkart.service.UsersService;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.foodkart.exception.RestaurantDoesNotExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,20 +32,22 @@ public class RestaurantController {
 
     @PostMapping("/register")
     public ResponseEntity<String> registerRestaurant(@RequestBody Restaurant restaurant){
-        boolean success = restaurantService.registerRestaurant(restaurant);
-        if(!success){
+        Restaurant r1 = restaurantService.registerRestaurant(restaurant);
+        if(r1 == null){
             return ResponseEntity.badRequest().body("Failed to register restaurant!");
         }
-        return ResponseEntity.ok().body("Restaurant registered successfully");
+        return ResponseEntity.ok().body("Restaurant registered successfully with ID: " + r1.getId());
     }
 
     @PostMapping("/updateQuantity")
     public ResponseEntity<String> updateQuantity(@RequestBody ObjectNode objectNode){
         boolean success = false;
         try {
-            success = restaurantService.updateQuantity(objectNode.get("name").textValue(), objectNode.get("itemQuantity").intValue());
+            success = restaurantService.updateQuantity(objectNode.get("restaurantNumber").intValue(), objectNode.get("itemQuantity").intValue());
         } catch (NullPointerException e){
             log.error("Body params formatted incorrectly.");
+        } catch (RestaurantDoesNotExistException e){
+            log.error(e.getMessage());
         }
         if(!success){
             return ResponseEntity.badRequest().body("Failed to update quantity!");
@@ -57,9 +59,11 @@ public class RestaurantController {
     public ResponseEntity<String> placeOrder(@RequestBody ObjectNode objectNode){
         boolean success = false;
         try {
-            success = restaurantService.placeOrder(objectNode.get("name").textValue(), objectNode.get("itemQuantity").intValue());
+            success = restaurantService.placeOrder(objectNode.get("restaurantNumber").intValue(), objectNode.get("itemQuantity").intValue());
         } catch (NullPointerException e){
             log.error("Body params formatted incorrectly.");
+        } catch (RestaurantDoesNotExistException e){
+            log.error(e.getMessage());
         }
         if(!success){
             return ResponseEntity.badRequest().body("Order cannot be placed!");

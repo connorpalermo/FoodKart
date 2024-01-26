@@ -1,4 +1,4 @@
-package com.connortest.entity;
+package com.foodkart.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,10 +16,13 @@ public class RestaurantReview {
     @Column(name = "id",nullable=false)
     private int id;
 
-    @Column(name = "name")
+    @Column(name = "review_number",nullable=false)
+    private int reviewNumber;
+
+    @Column(name = "name",nullable=false)
     private String name;
 
-    @Column(name = "rating")
+    @Column(name = "rating",nullable=false)
     private int rating;
 
     @Column(name = "comment")

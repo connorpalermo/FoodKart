@@ -1,4 +1,4 @@
-package com.connortest.entity;
+package com.foodkart.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,19 +16,22 @@ public class Restaurant {
     @Column(name = "id",nullable=false)
     private int id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "pincodes")
+    @Column(name = "restaurant_number",nullable=false)
+    private int restaurantNumber;
+
+    @Column(name = "pincodes", nullable = false)
     private String pincodes;
 
-    @Column(name = "food_name")
+    @Column(name = "food_name", nullable = false)
     private String foodName;
 
-    @Column(name = "food_price")
-    private String foodPrice;
+    @Column(name = "food_price", nullable = false)
+    private int foodPrice;
 
-    @Column(name = "item_quantity")
+    @Column(name = "item_quantity", nullable = false)
     private int itemQuantity;
 
     public Restaurant(){
@@ -36,7 +39,7 @@ public class Restaurant {
         this.name = "NullRestaurant";
         this.pincodes = "000";
         this.foodName = "NO FOOD";
-        this.foodPrice = "NO PRICE";
+        this.foodPrice = 0;
         this.itemQuantity = 0;
     }
 }

@@ -1,7 +1,7 @@
-package com.connortest.service;
+package com.foodkart.service;
 
-import com.connortest.entity.RestaurantReview;
-import com.connortest.repository.RestaurantReviewRepository;
+import com.foodkart.entity.RestaurantReview;
+import com.foodkart.repository.RestaurantReviewRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,14 +19,8 @@ public class RestaurantReviewService {
         this.restaurantReviewRepository = restaurantReviewRepository;
     }
 
-    public boolean registerRestaurant(RestaurantReview restaurantReview){
-        try {
-            restaurantReviewRepository.save(restaurantReview);
-        } catch(Exception e){
-            log.error(e.getMessage());
-            return false;
-        }
-        return true;
+    public RestaurantReview registerRestaurantReview(RestaurantReview restaurantReview){
+        return restaurantReviewRepository.save(restaurantReview);
     }
 
     public List<String> findByRating(int rating){

@@ -1,7 +1,8 @@
-package com.connortest.service;
+package com.foodkart.service;
 
-import com.connortest.entity.Restaurant;
-import com.connortest.repository.RestaurantRepository;
+import com.foodkart.entity.Restaurant;
+import com.foodkart.repository.RestaurantRepository;
+import com.foodkart.exception.RestaurantDoesNotExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,32 +21,24 @@ public class RestaurantService {
         this.restaurantRepository = restaurantRepository;
     }
 
-    public boolean registerRestaurant(Restaurant restaurant){
-        try {
-            restaurantRepository.save(restaurant);
-        } catch(Exception e){
-            log.error(e.getMessage());
-            return false;
-        }
-        return true;
+    public Restaurant registerRestaurant(Restaurant restaurant){
+        return restaurantRepository.save(restaurant);
     }
 
-    public boolean updateQuantity(String name, int quantity){
-        Restaurant restaurant = restaurantRepository.findByName(name);
+    public boolean updateQuantity(int restaurantNumber, int quantity) throws RestaurantDoesNotExistException {
+        Restaurant restaurant = restaurantRepository.findByRestaurantNumber(restaurantNumber);
         if(restaurant == null){
-            log.error("Restaurant with ID: " + name + " does not exist!");
-            return false;
+            throw new RestaurantDoesNotExistException("Restaurant with name: " + restaurantNumber + " does not exist.");
         }
         restaurant.setItemQuantity(restaurant.getItemQuantity() + quantity);
         restaurantRepository.save(restaurant);
         return true;
     }
 
-    public boolean placeOrder(String name, int quantity){
-        Restaurant restaurant = restaurantRepository.findByName(name);
+    public boolean placeOrder(int restaurantNumber, int quantity) throws RestaurantDoesNotExistException {
+        Restaurant restaurant = restaurantRepository.findByRestaurantNumber(restaurantNumber);
         if(restaurant == null){
-            log.error("Restaurant with ID: " + name + " does not exist!");
-            return false;
+            throw new RestaurantDoesNotExistException("Restaurant with name: " + restaurantNumber + " does not exist.");
         }
         else if(quantity > restaurant.getItemQuantity()){
             log.error("Item quantity is too high. Cannot place order");

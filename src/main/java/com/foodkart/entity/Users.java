@@ -1,4 +1,4 @@
-package com.connortest.entity;
+package com.foodkart.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +16,10 @@ public class Users {
     @Column(name = "id",nullable=false)
     private int id;
 
-    @Column(name = "name")
+    @Column(name = "username", nullable = false)
+    private String username;
+
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "gender")

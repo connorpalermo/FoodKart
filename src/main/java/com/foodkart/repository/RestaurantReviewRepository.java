@@ -1,6 +1,6 @@
-package com.connortest.repository;
+package com.foodkart.repository;
 
-import com.connortest.entity.RestaurantReview;
+import com.foodkart.entity.RestaurantReview;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -1,7 +1,7 @@
-package com.connortest.controller;
+package com.foodkart.controller;
 
-import com.connortest.entity.RestaurantReview;
-import com.connortest.service.RestaurantReviewService;
+import com.foodkart.entity.RestaurantReview;
+import com.foodkart.service.RestaurantReviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +23,11 @@ public class RestaurantReviewController {
 
     @PostMapping("/register")
     public ResponseEntity<String> registerRestaurantReview(@RequestBody RestaurantReview restaurantReview){
-        boolean success = restaurantReviewService.registerRestaurant(restaurantReview);
-        if(!success){
+        RestaurantReview review = restaurantReviewService.registerRestaurantReview(restaurantReview);
+        if(review == null){
             return ResponseEntity.badRequest().body("Unable to create restaurant review!");
         }
-        return ResponseEntity.ok().body("Restaurant review created!");
+        return ResponseEntity.ok().body("Restaurant review created with ID: " + review.getId());
     }
 
     @GetMapping("/findByRating")
